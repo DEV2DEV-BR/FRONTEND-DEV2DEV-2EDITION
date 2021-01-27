@@ -1,0 +1,18 @@
+.q-field {
+  height: 42px;
+}
+.q-field__control {
+  height: 42px;
+}
+.q-field__marginal {
+  height: auto;
+}
+.q-field__control-container {
+  height: 42px !important;
+}
+.q-field__label {
+  top: 10px;
+  bottom: 10px;
+  font-size: 15px;
+  color: $font-grey;
+}
