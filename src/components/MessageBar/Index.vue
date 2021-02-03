@@ -29,6 +29,7 @@
       label="Digite uma mensagem"
       bg-color="white"
       class="input-message"
+      @keyup.enter="sendMessage()"
     >
     </q-input>
     <q-btn
@@ -39,16 +40,39 @@
       text-color="grey"
       size="13px"
       class="q-ml-sm"
+      @click="sendMessage()"
     >
     </q-btn>
   </div>
 </template>
 
 <script>
+import api from "src/services/api";
+import { notify } from "src/utils";
 export default {
+  props: ["currentUser"],
   name: "MessageBar",
   data() {
-    return { text: "" };
+    return { text: "", myId: localStorage.getItem("myId") };
+  },
+  methods: {
+    async sendMessage() {
+      if (this.text !== "" && this.currentUser) {
+        await api
+          .post("message", {
+            text: this.text,
+            user_destination: this.currentUser,
+            user_send: this.myId
+          })
+          .then(response => {
+            this.$emit("reload", { messageId: response.data.id });
+            this.text = "";
+          })
+          .catch(error => {
+            notify("negative", error.response.data.message);
+          });
+      }
+    }
   }
 };
 </script>
